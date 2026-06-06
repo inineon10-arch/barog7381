@@ -363,28 +363,6 @@
     .mcard{padding:.65rem .55rem;}
   }
 
-  /* ── 시험 배너 영역 — 학습 영역과 시각적으로 구분 ── */
-  .study-banners-wrap{
-    display:none;             /* 시험 배너가 없으면 숨김 */
-    margin-bottom:2rem;
-    padding-bottom:1.5rem;
-    position:relative;
-  }
-  .study-banners-wrap.has-content{display:block;}
-  .study-banners-wrap.has-content::after{
-    content:'오늘의 학습';
-    position:absolute;left:50%;bottom:-.65rem;
-    transform:translateX(-50%);
-    padding:.1rem .75rem;background:var(--bg);
-    font-family:'Inter',sans-serif;font-size:.58rem;font-weight:600;
-    letter-spacing:.18em;text-transform:uppercase;color:var(--ink-mute);
-  }
-  .study-banners-wrap.has-content{border-bottom:1px solid var(--line);}
-  @media(max-width:480px){
-    .study-banners-wrap{margin-bottom:1.5rem;padding-bottom:1.1rem;}
-    .study-banners-wrap.has-content::after{font-size:.55rem;bottom:-.6rem;}
-  }
-
   /* ── 폴더 그룹 (확장 가능한 단어학습 영역) ── */
   .folder-group{margin-bottom:2.5rem;}
   .folder-group:last-child{margin-bottom:0;}
@@ -595,10 +573,8 @@
   </div>
 
   <!-- 통합 시험 배너 영역 (단어장 + 모의고사) -->
-  <div id="study-banners-wrap" class="study-banners-wrap">
-    <div id="quiz-banner-container"></div>
-    <div id="mock-banner-container"></div>
-  </div>
+  <div id="quiz-banner-container"></div>
+  <div id="mock-banner-container"></div>
 
   <!-- 배너 ↔ 단어장 구분선 (배너가 있을 때만 표시) -->
   <div class="study-divider hidden" id="study-divider">
@@ -1247,6 +1223,8 @@ function renderQuizBanners() {
   });
   updateStudyDivider();
 }
+
+function startQuizByIdx(idx) {
   currentQuiz = quizList[idx];
   if(!currentQuiz) return;
   QUIZ_CONFIG = { day: currentQuiz.day, count: currentQuiz.count };
@@ -2261,32 +2239,6 @@ function buildFolderJumpBar() {
 }
 
 function esc(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
-
-/* ============================================================
-   ★ 시험 배너 영역 자동 토글 — 배너가 있을 때만 구분선 표시
-   ============================================================ */
-(function setupBannerSeparator(){
-  function update(){
-    const qz = document.getElementById('quiz-banner-container');
-    const mq = document.getElementById('mock-banner-container');
-    const wrap = document.getElementById('study-banners-wrap');
-    if(!wrap || !qz || !mq) return;
-    const hasContent = qz.children.length > 0 || mq.children.length > 0;
-    wrap.classList.toggle('has-content', hasContent);
-  }
-  // DOM 준비된 후 observer 등록
-  function init(){
-    const qz = document.getElementById('quiz-banner-container');
-    const mq = document.getElementById('mock-banner-container');
-    if(!qz || !mq) { setTimeout(init, 100); return; }
-    const obs = new MutationObserver(update);
-    obs.observe(qz, { childList: true });
-    obs.observe(mq, { childList: true });
-    update();
-  }
-  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
-  else init();
-})();
 
 /* ============================================================
    ★ 뒤로가기 처리 — 학습 페이지 작업 스택

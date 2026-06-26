@@ -2,9 +2,10 @@
 <!--
 ═══════════════════════════════════════════════════════════════════
   BAROG English · 학습 자료실
-  현재 버전: v2.3  (2026-06-10)
+  현재 버전: v2.4  (2026-06-26)
 ─────────────────────────────────────────────────────────────────
   변경 이력:
+  v2.3.4 — 숙어장 폴더 활성화 (단어학습 탭)
   v2.3 — Daily Test 로딩 중 상태 표시
   v2.2 — 모바일 탭 라벨 축약 (오답/Test/암기) + 시험 개수 뱃지
   v2.1 — 첫 화면을 Daily Test 로 변경
@@ -684,23 +685,22 @@
     </div>
   </div>
 
-  <!-- ★ 향후 새 폴더 그룹 추가 예시 (주석을 풀면 자동으로 표시됨):
+  <!-- ★ 숙어장 폴더 그룹 -->
   <div class="folder-group" data-folder="school" id="folder-group-school" style="--fg-color:#d97706;--fg-rgb:217,119,6;">
     <div class="folder-group-header" onclick="toggleFolderGroup('school')">
       <span class="folder-group-toggle">▼</span>
-      <span class="folder-group-icon">🏫</span>
-      <span class="folder-group-name">내신단어</span>
+      <span class="folder-group-icon">💬</span>
+      <span class="folder-group-name">숙어장</span>
       <span class="folder-group-meta" id="school-meta-inline" style="display:none">
         <strong id="school-total">0</strong>개 단어 · <strong id="school-sets">0</strong>개 세트
       </span>
     </div>
     <div class="folder-group-body">
       <div id="school-content">
-        <div class="loading-box"><div class="spinner" style="border-top-color:#d97706"></div><span>내신단어 불러오는 중...</span></div>
+        <div class="loading-box"><div class="spinner" style="border-top-color:#d97706"></div><span>숙어장 불러오는 중...</span></div>
       </div>
     </div>
   </div>
-  -->
 </main>
 
 <!-- ★ 퀴즈 풀스크린 오버레이 — 탭과 무관하게 떠야 하므로 섹션 밖에 배치 -->
@@ -776,14 +776,14 @@
    ★ 앱 버전 — 변경할 때 이 값만 바꾸면 푸터·콘솔이 같이 갱신됨
    ════════════════════════════════════════════════════════════ */
 const APP_VERSION      = 'v2 · 3';
-const APP_VERSION_DATE = '3';
+const APP_VERSION_DATE = '4';
 
 const STUDENT_NAME = '장성훈';
 const VOCAB_CSV = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSwVyD25PYnOiPEOZhMGy2ZQpt8jQmG6DYM7mXB_2FaR2hCPDTk8kmqAUT4xiUSO-fHhT56N4symdII/pub?output=csv&gid=1436259475';
 const MOCK_CSV  = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSwVyD25PYnOiPEOZhMGy2ZQpt8jQmG6DYM7mXB_2FaR2hCPDTk8kmqAUT4xiUSO-fHhT56N4symdII/pub?output=csv&gid=222284112';
-const SCHOOL_CSV  = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSwVyD25PYnOiPEOZhMGy2ZQpt8jQmG6DYM7mXB_2FaR2hCPDTk8kmqAUT4xiUSO-fHhT56N4symdII/pub?output=csv&gid=1671929824';
 const WEAK_CSV  = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSwVyD25PYnOiPEOZhMGy2ZQpt8jQmG6DYM7mXB_2FaR2hCPDTk8kmqAUT4xiUSO-fHhT56N4symdII/pub?output=csv&gid=1027447664';
-
+/* ★ 숙어장 시트 URL — 같은 스프레드시트의 숙어장 탭 gid 로 교체하세요 */
+const SCHOOL_CSV = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSwVyD25PYnOiPEOZhMGy2ZQpt8jQmG6DYM7mXB_2FaR2hCPDTk8kmqAUT4xiUSO-fHhT56N4symdII/pub?output=csv&gid=1671929824';
 
 document.title = ' BAROG · ' + STUDENT_NAME ;
 
@@ -818,17 +818,15 @@ const STUDY_FOLDERS = [
     rgb   : '26,122,94',
     quizSrc: 'mock',
   },
-
   {
     id    : 'school',
-    name  : '숙어',
-    icon  : '🏫',
+    name  : '숙어장',
+    icon  : '💬',
     csv   : SCHOOL_CSV,
     color : '#d97706',
     rgb   : '217,119,6',
     quizSrc: 'school',
-  }
-
+  },
 ];
 
 /* ============================================================
@@ -2576,7 +2574,7 @@ function updateStudyCount() {
   // 모의고사
   const mt = parseInt(document.getElementById('mock-total')?.textContent) || 0;
   if(mt > 0) { total += mt; any = true; }
-  // 향후 폴더 (예: 내신단어)
+  // 숙어장
   const st = parseInt(document.getElementById('school-total')?.textContent) || 0;
   if(st > 0) { total += st; any = true; }
   el.textContent = any ? `전체 ${total}개 단어` : '불러오는 중...';

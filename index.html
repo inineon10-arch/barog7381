@@ -2,9 +2,10 @@
 <!--
 ═══════════════════════════════════════════════════════════════════
   BAROG English · 학습 자료실
-  현재 버전: v2.3.5  (2026-06-26)
+  현재 버전: v2.3.6  (2026-06-27)
 ─────────────────────────────────────────────────────────────────
   변경 이력:
+  v2.3.6 — Daily Test 배너 색상 일관성 (숙어장=앰버, 추가단어=블루로 분리)
   v2.3.5 — 숙어장 Daily Test 연동 (quiz_config "ID xx" 자동 인식) + 폴더 순서 단어장→숙어장→모의고사
   v2.3.4 — 숙어장 폴더 활성화 (별도 시트, ID 컬럼 기반)
   v2.3 — Daily Test 로딩 중 상태 표시
@@ -40,8 +41,10 @@
     --purple:#7036e3;
     --green-mock:#1a7a5e;
     --green-mock-soft:#2aab84;
-    --amber-weak:#d97706;
+    --amber-weak:#d97706;       /* 숙어장 (단어 암기 폴더 + Daily Test 배너 + 퀴즈 오버레이) */
     --amber-weak-soft:#f59e0b;
+    --blue-weak:#2563eb;        /* 추가 단어 (Daily Test 배너 + 추가단어 퀴즈) */
+    --blue-weak-soft:#3b82f6;
   }
   *{box-sizing:border-box;margin:0;padding:0;}
   html{scroll-behavior:smooth;}
@@ -366,15 +369,25 @@
   .quiz-banner.mock-banner.overdue .quiz-banner-label{color:#d94040;}
   .quiz-banner.mock-banner.overdue .quiz-banner-btn{background:#d94040;}
 
-  /* ── 추가 단어(취약 단어) 배너 — 앰버 ── */
-  .quiz-banner.weak-banner{border-color:rgba(217,119,6,.25);background:var(--card);box-shadow:0 2px 12px rgba(217,119,6,.08);}
-  .quiz-banner.weak-banner::before{background:var(--amber-weak);}
-  .quiz-banner.weak-banner .quiz-banner-label{color:var(--amber-weak);}
-  .quiz-banner.weak-banner .quiz-banner-btn{background:var(--amber-weak);}
+  /* ── 추가 단어(취약 단어) 배너 — 블루 ── */
+  .quiz-banner.weak-banner{border-color:rgba(37,99,235,.25);background:var(--card);box-shadow:0 2px 12px rgba(37,99,235,.08);}
+  .quiz-banner.weak-banner::before{background:var(--blue-weak);}
+  .quiz-banner.weak-banner .quiz-banner-label{color:var(--blue-weak);}
+  .quiz-banner.weak-banner .quiz-banner-btn{background:var(--blue-weak);}
   .quiz-banner.weak-banner.overdue{border-color:rgba(217,64,64,.35);background:#fff5f5;}
   .quiz-banner.weak-banner.overdue::before{background:#d94040;}
   .quiz-banner.weak-banner.overdue .quiz-banner-label{color:#d94040;}
   .quiz-banner.weak-banner.overdue .quiz-banner-btn{background:#d94040;}
+
+  /* ── 숙어장 배너 — 앰버 (Daily Test의 '오늘의 숙어') ── */
+  .quiz-banner.school-banner{border-color:rgba(217,119,6,.25);background:var(--card);box-shadow:0 2px 12px rgba(217,119,6,.08);}
+  .quiz-banner.school-banner::before{background:var(--amber-weak);}
+  .quiz-banner.school-banner .quiz-banner-label{color:var(--amber-weak);}
+  .quiz-banner.school-banner .quiz-banner-btn{background:var(--amber-weak);}
+  .quiz-banner.school-banner.overdue{border-color:rgba(217,64,64,.35);background:#fff5f5;}
+  .quiz-banner.school-banner.overdue::before{background:#d94040;}
+  .quiz-banner.school-banner.overdue .quiz-banner-label{color:#d94040;}
+  .quiz-banner.school-banner.overdue .quiz-banner-btn{background:#d94040;}
 
   .qz-card-line.mock{background:linear-gradient(90deg,var(--green-mock) 0%,var(--green-mock-soft) 100%);}
   .qz-pill.mock-pill{background:#e6f7f3;color:var(--green-mock);border:1px solid #b3dfd4;}
@@ -382,12 +395,25 @@
   .qz-submit-btn.mock-submit{background:var(--green-mock);box-shadow:0 4px 16px rgba(26,122,94,.25);}
   .qz-name.mock-name{color:var(--green-mock) !important;}
 
-  /* ── 추가 단어 퀴즈 오버레이 — 앰버 ── */
-  .qz-card-line.weak{background:linear-gradient(90deg,var(--amber-weak) 0%,var(--amber-weak-soft) 100%);}
-  .qz-pill.weak-pill{background:#fef3e6;color:var(--amber-weak);border:1px solid #fad9a8;}
-  .qz-start-btn.weak-start{background:var(--amber-weak);box-shadow:0 4px 16px rgba(217,119,6,.25);}
-  .qz-submit-btn.weak-submit{background:var(--amber-weak);box-shadow:0 4px 16px rgba(217,119,6,.25);}
-  .qz-name.weak-name{color:var(--amber-weak) !important;}
+  /* ── 추가 단어 퀴즈 오버레이 — 블루 ── */
+  .qz-card-line.weak{background:linear-gradient(90deg,var(--blue-weak) 0%,var(--blue-weak-soft) 100%);}
+  .qz-pill.weak-pill{background:#dbeafe;color:var(--blue-weak);border:1px solid #93c5fd;}
+  .qz-start-btn.weak-start{background:var(--blue-weak);box-shadow:0 4px 16px rgba(37,99,235,.25);}
+  .qz-submit-btn.weak-submit{background:var(--blue-weak);box-shadow:0 4px 16px rgba(37,99,235,.25);}
+  .qz-name.weak-name{color:var(--blue-weak) !important;}
+
+  /* ── 단어장 퀴즈 오버레이가 숙어장 모드로 동작할 때 — 보라를 앰버로 ──
+     retry(분홍)·result(초록)·재시도 시작 버튼은 의미가 있으니 원래 색 유지 */
+  .qz-overlay.school-mode .qz-name{color:var(--amber-weak);}
+  .qz-overlay.school-mode .qz-card-line{background:linear-gradient(90deg,var(--amber-weak) 0%,var(--amber-weak-soft) 100%);}
+  .qz-overlay.school-mode .qz-card-line.retry{background:linear-gradient(90deg,#be185d 0%,#f472b6 100%);}
+  .qz-overlay.school-mode .qz-card-line.result{background:linear-gradient(90deg,#1a9e6f 0%,#6ee7b7 100%);}
+  .qz-overlay.school-mode .qz-start-btn{background:var(--amber-weak);box-shadow:0 4px 16px rgba(217,119,6,.25);}
+  .qz-overlay.school-mode .qz-start-btn.retry{background:#be185d;box-shadow:0 4px 16px rgba(190,24,93,.25);}
+  .qz-overlay.school-mode .qz-submit-btn{background:var(--amber-weak);box-shadow:0 4px 16px rgba(217,119,6,.25);}
+  .qz-overlay.school-mode .qz-pill{background:#fef3e6;color:var(--amber-weak);border:1px solid #fad9a8;}
+  .qz-overlay.school-mode .qz-pill.retry{background:#fce7f3;color:#be185d;border-color:#fbcfe8;}
+  .qz-overlay.school-mode .qz-pill.done{background:#ecfdf5;color:#1a9e6f;border-color:#a7f3d0;}
 
   @media(max-width:768px){
     .mock-day-grid{grid-template-columns:repeat(2,1fr) !important;gap:.55rem;}
@@ -833,8 +859,8 @@
 /* ════════════════════════════════════════════════════════════
    ★ 앱 버전 — 변경할 때 이 값만 바꾸면 푸터·콘솔이 같이 갱신됨
    ════════════════════════════════════════════════════════════ */
-const APP_VERSION      = 'v2 · 3';
-const APP_VERSION_DATE = '5';
+const APP_VERSION      = '2 · 3';
+const APP_VERSION_DATE = '6';
 
 const STUDENT_NAME = '장성훈';
 const VOCAB_CSV = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSwVyD25PYnOiPEOZhMGy2ZQpt8jQmG6DYM7mXB_2FaR2hCPDTk8kmqAUT4xiUSO-fHhT56N4symdII/pub?output=csv&gid=1436259475';
@@ -1612,7 +1638,9 @@ function renderQuizBanners() {
 
   quizList.forEach((q, idx) => {
     const banner = document.createElement('div');
-    banner.className = 'quiz-banner' + (q.overdue ? ' overdue' : '');
+    banner.className = 'quiz-banner'
+                     + (isSchoolDay(q.day) ? ' school-banner' : '')
+                     + (q.overdue ? ' overdue' : '');
     banner.dataset.idx = idx;
 
     /* ── 배너 왼쪽 영역 ── */
@@ -1707,7 +1735,13 @@ function startQuiz() {
   qzOriginalTotal = selected.length;
   qzStartTime = Date.now();
   document.getElementById('qz-title').textContent=`${QUIZ_CONFIG.day} · 객관식`;
-  document.getElementById('qz-overlay').style.display='flex';
+  /* ★ 숙어장 모드면 오버레이를 앰버로 토글 + 헤더 이름 변경 */
+  const _overlay = document.getElementById('qz-overlay');
+  const _isSchool = isSchoolDay(QUIZ_CONFIG.day);
+  _overlay.classList.toggle('school-mode', _isSchool);
+  const _nameEl = _overlay.querySelector('.qz-name');
+  if(_nameEl) _nameEl.textContent = _isSchool ? '바로그영어 · 숙어장' : '바로그영어 · 단어장';
+  _overlay.style.display='flex';
   // 뒤로가기 감지용 history 상태 추가
   history.pushState({ quiz: true }, '', location.href);
   qzUpdatePill();
